@@ -6,7 +6,7 @@ if has('vim_starting')
 endif
 
 " Required:
-call neobundle#rc(expand('~/.vim/bundle/'))
+call neobundle#begin(expand('~/.vim/bundle/'))
 
 " Let NeoBundle manage NeoBundle
 " Required:
@@ -55,4 +55,4 @@ filetype plugin indent on
 NeoBundleCheck
 
 syntax on
-
+call neobundle#end()
