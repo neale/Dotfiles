@@ -17,3 +17,4 @@ nvm use v0.11.14
 clear
 fortune | cowthink -f vader
 alias c="clear"
+alias s="git status"
