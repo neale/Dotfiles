@@ -20,6 +20,7 @@ NeoBundle 'scrooloose/nerdtree'
 NeoBundle 'Shougo/neosnippet.vim'
 NeoBundle 'Shougo/neosnippet-snippets'
 NeoBundle 'nathanaelkane/vim-indent-guides'
+NeoBundle 'ryanss/vim-hackernews'
 
 " Syntax highlighters
 NeoBundle 'tpope/vim-markdown'
