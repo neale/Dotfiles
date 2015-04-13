@@ -6,9 +6,8 @@ lib="/usr/local/lib"
 bin="/usr/local/bin"
 
 
-APT_FORMULAS="clang cmake curl fortune-mod gcc-avr git-core ipython, make, minicom \ 
-              php5, python-matplotlib, python-scipy, python-numpy tmux, vim, time \
-              vim-gtk, weechat, wget, xaos, zsh, docker"
+APT_FORMULAS="clang cmake curl fortune-mod gcc-avr git-core ipython minicom \ 
+php5 cowsay python-matplotlib python-scipy python-numpy tmux vim weechat xaos zsh docker git"
 binaries=(
     graphicsmagick
     webkit2png
@@ -68,17 +67,18 @@ elif [ "$(uname)" == "Linux" ]; then
   sudo apt-get install curl
   curl -sL https://deb.nodesource.com/setup | sudo bash -
   sudo apt-get install -y $APT_FORMULAS
-  cd $HOME
-  curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | sh
+  cd $HOME 
   mkdir repos
   cd repos
+  curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | sh
+  git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
+  chsh -s /bin/zsh
+
   git clone https://github.com/neale/Dotfiles.git
   cd Dotfiles
   sudo cp .bashrc .tmux.conf .vimrc .zlogin .zpreztorc .zshrc $HOME
   cd $HOME
   zsh
-  git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
-  chsh -s /bin/zsh
   exit
   zsh
   cd $HOME/repos
