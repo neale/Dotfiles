@@ -6,11 +6,11 @@ lib="/usr/local/lib"
 bin="/usr/local/bin"
 wallpaperdir='$HOME/wallpaper'
 
-
+PIP_MODULES="numpy scipy matplotlib pymatbridge simplejson pyserial pyzmq pyqtgraph"
 APT_FORMULAS="clang cmake curl fortune-mod gcc-avr git-core ipython minicom \ 
 php5 cowsay python-matplotlib python-scipy python-numpy tmux vim weechat xaos zsh docker git"
 BREW_FORMULAS="wget gcc node python git qt gnu-tar gnu-sed gawk gnutls \
-  zsh gnu-indent gnu-getopt grc coreutils spark bash findutils tmux"
+  mobile-shell zsh gnu-indent gnu-getopt grc coreutils spark bash findutils tmux"
 binaries=(
     graphicsmagick
     webkit2png
@@ -25,6 +25,8 @@ binaries=(
     ack
     hub
     git
+    cowthink
+    fortune
 )
 apps=(
     alfred 
@@ -67,16 +69,23 @@ if [ "$(uname)" == "Darwin" ]; then
   defaults write NSGlobalDomain KeyRepeat -int 0
 
   mkdir repos && cd repos
-  chsh -s /bin/zsh && zsh
   git clone https://github.com/neale/Dotfiles.git && cd Dotfiles
-
+  cp .bashrc .tmux.conf .vimrc .zlogin .zpreztorc .zshrc $HOME
+  cd $HOME 
+  chsh -s /bin/zsh && zsh
+  exit
+  zsh
+  cd $HOME/repos
   git clone https://github.com/neale/music-collaboratory.git
   git clone https://github.com/neale/relations.git
   git clone https://github.com/neale/EnCom.git
   git clone https://github.com/neale/neural-net-node.git
   git clone https://github.com/neale/nrf-basic.git
+  easy_install pip
+  pip install $PIP_FORMULAS
+  curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | sh
   
-
+  echo "done"
 elif [ "$(uname)" == "Linux" ]; then
   sudo apt-get install curl
   curl -sL https://deb.nodesource.com/setup | sudo bash -
@@ -110,7 +119,8 @@ elif [ "$(uname)" == "Linux" ]; then
   files=($wallpaperdir/*)
   yellowstone=`printf "%s\n" "${files[RANDOM % ${files[@]}]}"`
   gconftool-2 -t str --set /desktop/gnome/background/picture_filename "$randompic" cd $HOME
+  wget https://bootstrap.pypa.io/get-pip.py
+  python get-pip.py
 fi
-wget https://bootstrap.pypa.io/get-pip.py
-python get-pip.py
+
 echo "done"
