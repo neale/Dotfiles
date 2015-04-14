@@ -4,10 +4,13 @@
 dirname=$(pwd)
 lib="/usr/local/lib"
 bin="/usr/local/bin"
+wallpaperdir='$HOME/wallpaper'
 
 
 APT_FORMULAS="clang cmake curl fortune-mod gcc-avr git-core ipython minicom \ 
 php5 cowsay python-matplotlib python-scipy python-numpy tmux vim weechat xaos zsh docker git"
+BREW_FORMULAS="wget gcc node python git qt gnu-tar gnu-sed gawk gnutls \
+  zsh gnu-indent gnu-getopt grc coreutils spark bash findutils tmux"
 binaries=(
     graphicsmagick
     webkit2png
@@ -39,19 +42,19 @@ apps=(
  
 if [ "$(uname)" == "Darwin" ]; then
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-  brew install $BREW_FORMULAS
+  brew install -with-default-names $BREW_FORMULAS   
+  brew linkapps qt
   brew tap homebrew/dupes
   brew install homebrew/dupes/grep
-  brew install grc coreutils spark bash findutils
-  $PATH=$(brew --prefix coreutils)/libexec/gnubin:$PATH
+  PATH="usr/local/opt/coreutils/libexec/gnubin":$PATH
+  MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH" 
   echo "installing binaries..."
   brew install ${binaries[@]}
   brew cleanup
   brew install caskroom/cask/brew-cask
  # default install is /Users/$user/Applications
   echo "installing cask apps.."
-  brew cask install --appdir="Applications" ${apps[@]}
-  brew cask alfred link
+  brew cask install --appdir="/Applications" ${apps[@]}
   brew cleanup
  
   #Use AirDrop over every interface. srsly this should be a default.
@@ -62,6 +65,17 @@ if [ "$(uname)" == "Darwin" ]; then
 
   # Set a really fast key repeat.
   defaults write NSGlobalDomain KeyRepeat -int 0
+
+  mkdir repos && cd repos
+  chsh -s /bin/zsh && zsh
+  git clone https://github.com/neale/Dotfiles.git && cd Dotfiles
+
+  git clone https://github.com/neale/music-collaboratory.git
+  git clone https://github.com/neale/relations.git
+  git clone https://github.com/neale/EnCom.git
+  git clone https://github.com/neale/neural-net-node.git
+  git clone https://github.com/neale/nrf-basic.git
+  
 
 elif [ "$(uname)" == "Linux" ]; then
   sudo apt-get install curl
@@ -88,7 +102,14 @@ elif [ "$(uname)" == "Linux" ]; then
   git clone https://github.com/neale/EnCom.git
   git clone https://github.com/neale/neural-net-node.git
   git clone https://github.com/neale/nrf-basic.git
-  cd $HOME
+ 
+  #wallpaper (yosemite)
+  wget https://9to5mac.files.wordpress.com/2014/08/yosemite.jpg 
+  mkdir wallpaper
+  mv yosemite.jpg $wallpaperdir
+  files=($wallpaperdir/*)
+  yellowstone=`printf "%s\n" "${files[RANDOM % ${files[@]}]}"`
+  gconftool-2 -t str --set /desktop/gnome/background/picture_filename "$randompic" cd $HOME
 fi
 wget https://bootstrap.pypa.io/get-pip.py
 python get-pip.py
