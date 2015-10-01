@@ -1,7 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 
 # paths
-dirname=$(pwd)
+dirname="$(pwd)"
 lib="/usr/local/lib"
 bin="/usr/local/bin"
 wallpaperdir='$HOME/wallpaper'
@@ -9,7 +9,7 @@ wallpaperdir='$HOME/wallpaper'
 PIP_MODULES="numpy scipy matplotlib pymatbridge simplejson pyserial pyzmq pyqtgraph"
 APT_FORMULAS="clang cmake curl fortune-mod gcc-avr git-core ipython minicom \ 
 php5 cowsay python-matplotlib python-scipy python-numpy tmux vim weechat xaos zsh docker git"
-BREW_FORMULAS="wget gcc node python git qt gnu-tar gnu-sed gawk gnutls \
+BREW_FORMULAS="vim wget gcc node python git qt gnu-tar gnu-sed gawk gnutls \
   mobile-shell zsh gnu-indent gnu-getopt grc coreutils spark bash findutils tmux"
 binaries=(
     graphicsmagick
@@ -90,28 +90,31 @@ elif [ "$(uname)" == "Linux" ]; then
   sudo apt-get install curl
   curl -sL https://deb.nodesource.com/setup | sudo bash -
   sudo apt-get install -y $APT_FORMULAS
+  sudo apt-get install zsh tmux
   cd $HOME 
   mkdir repos
   cd repos
   curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | sh
   git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
+  echo changing default shell to zsh
   chsh -s /bin/zsh
-
+  echo getting dotfiles
   git clone https://github.com/neale/Dotfiles.git
   cd Dotfiles
   sudo cp .bashrc .tmux.conf .vimrc .zlogin .zpreztorc .zshrc $HOME
   cd $HOME
   zsh
-  exit
-  zsh
+  exit && zsh
+  exit && zsh
   cd $HOME/repos
   #git repos
+  echo cloning repos
   git clone https://github.com/neale/music-collaboratory.git
   git clone https://github.com/neale/relations.git
   git clone https://github.com/neale/EnCom.git
   git clone https://github.com/neale/neural-net-node.git
   git clone https://github.com/neale/nrf-basic.git
- 
+  echo getting wallpaper
   #wallpaper (yosemite)
   wget https://9to5mac.files.wordpress.com/2014/08/yosemite.jpg 
   mkdir wallpaper
@@ -121,6 +124,7 @@ elif [ "$(uname)" == "Linux" ]; then
   gconftool-2 -t str --set /desktop/gnome/background/picture_filename "$randompic" cd $HOME
   wget https://bootstrap.pypa.io/get-pip.py
   python get-pip.py
+  
 fi
 
 echo "done"
